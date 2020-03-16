@@ -1,24 +1,24 @@
 import 'dart:developer';
 
 class HourlyData {
-  var time;
-  var summary;
-  var icon;
-  var precipIntensity;
-  var precipProbability;
-  var precipType;
-  var temperature;
-  var apparentTemperature;
-  var dewPoint;
-  var humidity;
-  var pressure;
-  var windSpeed;
-  var windGust;
-  var windBearing;
-  var cloudCover;
-  var uvIndex;
-  var visibility;
-  var ozone;
+  int time;
+  String summary;
+  String icon;
+  double precipIntensity;
+  double precipProbability;
+  String precipType;
+  double temperature;
+  double apparentTemperature;
+  double dewPoint;
+  double humidity;
+  double pressure;
+  double windSpeed;
+  double windGust;
+  double windBearing;
+  double cloudCover;
+  double uvIndex;
+  double visibility;
+  double ozone;
 
   HourlyData(
       {this.time,
@@ -41,25 +41,24 @@ class HourlyData {
       this.ozone});
 
   HourlyData.fromJson(Map<String, dynamic> json) {
-    log('fromJson hourly data');
     time = json['time'];
     summary = json['summary'];
     icon = json['icon'];
-    precipIntensity = json['precipIntensity'];
-    precipProbability = json['precipProbability'];
+    precipIntensity = json['precipIntensity'].toDouble();
+    precipProbability = json['precipProbability'].toDouble();
     precipType = json['precipType'];
-    temperature = json['temperature'];
-    apparentTemperature = json['apparentTemperature'];
-    dewPoint = json['dewPoint'];
-    humidity = json['humidity'];
-    pressure = json['pressure'];
-    windSpeed = json['windSpeed'];
-    windGust = json['windGust'];
-    windBearing = json['windBearing'];
-    cloudCover = json['cloudCover'];
-    uvIndex = json['uvIndex'];
-    visibility = json['visibility'];
-    ozone = json['ozone'];
+    temperature = json['temperature'].toDouble();
+    apparentTemperature = json['apparentTemperature'].toDouble();
+    dewPoint = json['dewPoint'].toDouble();
+    humidity = json['humidity'].toDouble();
+    pressure = json['pressure'].toDouble();
+    windSpeed = json['windSpeed'].toDouble();
+    windGust = json['windGust'].toDouble();
+    windBearing = json['windBearing'].toDouble();
+    cloudCover = json['cloudCover'].toDouble();
+    uvIndex = json['uvIndex'].toDouble();
+    visibility = json['visibility'].toDouble();
+    ozone = json['ozone'].toDouble();
   }
 
   Map<String, dynamic> toJson() {

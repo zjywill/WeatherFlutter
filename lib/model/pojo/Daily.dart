@@ -1,8 +1,8 @@
 import 'DailyData.dart';
 
 class Daily {
-  var summary;
-  var icon;
+  String summary;
+  String icon;
   List<DailyData> data;
 
   Daily({this.summary, this.icon, this.data});

@@ -55,7 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    futureForecast = DarkSkyApi.fetchForecast('37.8267', '-122.4233');
+    futureForecast =
+        DarkSkyApi.fetchForecast('37.8267', '-122.4233').catchError((e) {
+      print("Got error: $e");
+      throw Exception('Failed to load forecast');
+    });
   }
 
   void _incrementCounter() {

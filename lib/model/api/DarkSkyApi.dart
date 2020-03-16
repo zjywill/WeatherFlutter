@@ -13,7 +13,7 @@ class DarkSkyApi {
   static Future<Forecast> fetchForecast(latitude, longitude) async {
     log('latitude: $latitude,longitude: $longitude');
     final response = await http.get(
-        'https://api.darksky.net/forecast/14ecc9a31114895968a05c70cf5be1a9/$latitude,$longitude?exclude=minutely,alerts,flags,hourly&units=ca');
+        'https://api.darksky.net/forecast/14ecc9a31114895968a05c70cf5be1a9/$latitude,$longitude?exclude=minutely,alerts,flags&units=ca');
     if (response.statusCode == 200) {
       return Forecast.fromJson(json.decode(response.body));
     } else {

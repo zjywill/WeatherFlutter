@@ -3,13 +3,13 @@ import 'Daily.dart';
 import 'Hourly.dart';
 
 class Forecast {
-  var latitude;
-  var longitude;
-  var timezone;
+  double latitude;
+  double longitude;
+  String timezone;
   Currently currently;
   Hourly hourly;
   Daily daily;
-  var offset;
+  int offset;
 
   Forecast(
       {this.latitude,

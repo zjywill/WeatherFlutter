@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'HourlyData.dart';
 
 class Hourly {
-  var summary;
-  var icon;
+  String summary;
+  String icon;
   List<HourlyData> data;
 
   Hourly({this.summary, this.icon, this.data});

@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:WeatherFultter/model/api/DarkSkyApi.dart';
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
@@ -64,10 +66,20 @@ Stream<dynamic> dailyEpic(
 }
 
 Stream<dynamic> _forecast(String latitude, String longitude) async* {
-  log('forecast latitude: $latitude longitude: $longitude');
   yield DailyLoadingAction();
   log('DailyLoadingAction Done');
   try {
+    PermissionStatus permissionStatus = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.location);
+    String latitude = '40.7127';
+    String longitude = '-74.0059';
+    if (permissionStatus == PermissionStatus.granted) {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      latitude = position.latitude.toString();
+      longitude = position.longitude.toString();
+    }
+    log('forecast latitude: $latitude longitude: $longitude');
     yield DailyResultAction(
         await DarkSkyApi.fetchForecast(latitude, longitude));
   } catch (e) {

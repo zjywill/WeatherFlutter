@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,26 +12,30 @@ class DailyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<DailyState, DailyScreenViewModel>(
+    return StoreConnector<DailyState, _DailyScreenViewModel>(
       converter: (store) {
-        return DailyScreenViewModel(
+        return _DailyScreenViewModel(
             state: store.state,
-            onPressed: store.dispatch(DailyGetAction('40.7127', '-74.0059')));
+            onPressed: () {
+              print("button pressed2");
+              store.dispatch(DailyGetAction('40.7127', '-74.0059'));
+            });
       },
-      builder: (BuildContext context, DailyScreenViewModel vm) {
+      builder: (BuildContext context, _DailyScreenViewModel vm) {
         return Scaffold(
           body: Flex(direction: Axis.vertical, children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 4.0),
-              child: FlatButton(
-                child: Text("forcast"),
-                onPressed: () => vm.onPressed,
+              color: Colors.brown,
+              padding: EdgeInsets.fromLTRB(16.0, 48.0, 16.0, 4.0),
+              child: RaisedButton(
+                child: Text("Forcast"),
+                onPressed: () => vm.onPressed(),
               ),
             ),
             Expanded(
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 500),
-                child: buildVisible(vm.state),
+                child: _buildVisible(vm.state),
               ),
             )
           ]),
@@ -39,7 +45,7 @@ class DailyScreen extends StatelessWidget {
   }
 }
 
-Widget buildVisible(DailyState state) {
+Widget _buildVisible(DailyState state) {
   if (state is DailyLoading) {
     print("DailyLoading");
     return DailyInitialScreen();
@@ -60,9 +66,9 @@ Widget buildVisible(DailyState state) {
   throw ArgumentError('No view for state: $state');
 }
 
-class DailyScreenViewModel {
+class _DailyScreenViewModel {
   final DailyState state;
   final void Function() onPressed;
 
-  DailyScreenViewModel({this.state, this.onPressed});
+  _DailyScreenViewModel({this.state, this.onPressed});
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class Currently {
   var time;
   var summary;

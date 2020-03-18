@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class DailyData {
   int time;
   String summary;

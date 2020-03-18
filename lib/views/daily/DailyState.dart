@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:WeatherFultter/model/api/DarkSkyApi.dart';
@@ -57,17 +58,19 @@ DailyState _onResult(DailyState state, DailyResultAction action) =>
 
 class DailyEpic implements EpicClass<DailyState> {
   @override
-  Stream call(Stream actions, EpicStore<DailyState> store) {
+  Stream<dynamic> call(Stream<dynamic> actions, EpicStore<DailyState> store) {
+    if(actions.runtimeType == DailyGetAction){
+      log('forecast DailyGetAction');
+    }
     log('forecast actions: $actions store: $store');
     return actions
-        .whereType<DailyGetAction>()
-        .flatMap((value) => forecast(value.latitude, value.longitude));
+        .asyncMap((value) => forecast('40.7127', '-74.0059'));
   }
 
   Stream<dynamic> forecast(String latitude, String longitude) async* {
     log('forecast latitude: $latitude longitude: $longitude');
     yield DailyLoadingAction();
-
+    log('DailyLoadingAction Done');
     try {
       yield DailyResultAction(
           await DarkSkyApi.fetchForecast(latitude, longitude));

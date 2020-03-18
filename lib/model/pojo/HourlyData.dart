@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class HourlyData {
   int time;
   String summary;

@@ -10,7 +10,7 @@ void main() {
     forecastReducer,
     initialState: DailyInitial(),
     middleware: [
-      EpicMiddleware<DailyState>(DailyEpic()),
+      EpicMiddleware<DailyState>(dailyEpic),
     ],
   );
 

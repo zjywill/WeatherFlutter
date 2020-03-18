@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'HourlyData.dart';
 
 class Hourly {
@@ -15,7 +13,6 @@ class Hourly {
     if (json['data'] != null) {
       data = new List<HourlyData>();
       json['data'].forEach((v) {
-        log('fromJson hourly data');
         data.add(new HourlyData.fromJson(v));
       });
     }

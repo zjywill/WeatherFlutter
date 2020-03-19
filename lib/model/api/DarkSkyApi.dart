@@ -10,8 +10,9 @@ class DarkSkyApi {
 //    return http.get(
 //        'https://api.darksky.net/forecast/14ecc9a31114895968a05c70cf5be1a9/37.8267,-122.4233?exclude=minutely,alerts,flags&units=ca');
 //  }
+  DarkSkyApi();
 
-  static Future<Forecast> fetchForecast(latitude, longitude) async {
+  Future<Forecast> fetchForecast(latitude, longitude) async {
     log('latitude: $latitude,longitude: $longitude');
     final response = await http.get(
         'https://api.darksky.net/forecast/14ecc9a31114895968a05c70cf5be1a9/$latitude,$longitude?exclude=minutely,alerts,flags&units=ca');

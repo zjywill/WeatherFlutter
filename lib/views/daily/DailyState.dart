@@ -25,12 +25,7 @@ class DailyPopulated implements DailyState {
 
 class DailyError implements DailyState {}
 
-class DailyGetAction {
-  final String latitude;
-  final String longitude;
-
-  DailyGetAction(this.latitude, this.longitude);
-}
+class DailyGetAction {}
 
 class DailyLoadingAction {}
 
@@ -60,12 +55,10 @@ DailyState _onResult(DailyState state, DailyResultAction action) =>
 
 Stream<dynamic> dailyEpic(
     Stream<dynamic> actions, EpicStore<DailyState> store) {
-  return actions
-      .whereType<DailyGetAction>()
-      .switchMap((action) => _forecast('40.7127', '-74.0059'));
+  return actions.whereType<DailyGetAction>().switchMap((action) => _forecast());
 }
 
-Stream<dynamic> _forecast(String latitude, String longitude) async* {
+Stream<dynamic> _forecast() async* {
   yield DailyLoadingAction();
   log('DailyLoadingAction Done');
   try {
@@ -79,9 +72,10 @@ Stream<dynamic> _forecast(String latitude, String longitude) async* {
       latitude = position.latitude.toString();
       longitude = position.longitude.toString();
     }
+
     log('forecast latitude: $latitude longitude: $longitude');
     yield DailyResultAction(
-        await DarkSkyApi.fetchForecast(latitude, longitude));
+        await DarkSkyApi().fetchForecast(latitude, longitude));
   } catch (e) {
     yield DailyErrorAction();
   }

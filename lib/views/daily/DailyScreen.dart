@@ -18,11 +18,34 @@ class DailyScreen extends StatelessWidget {
             state: store.state,
             onPressed: () {
               print("button pressed2");
-              store.dispatch(DailyGetAction('40.7127', '-74.0059'));
+              store.dispatch(DailyGetAction());
             });
       },
       builder: (BuildContext context, _DailyScreenViewModel vm) {
         return Scaffold(
+          appBar: AppBar(
+            leading: Icon(
+              Icons.location_searching,
+              color: Colors.white,
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(_buildAppbarTitle(vm.state),
+                    textAlign: TextAlign.left,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    )),
+                Text(_buildAppbarSubtitle(vm.state),
+                    textAlign: TextAlign.left,
+                    style: new TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.white,
+                    )),
+              ],
+            ),
+          ),
           body: Flex(direction: Axis.vertical, children: <Widget>[
             Container(
               color: Colors.brown,
@@ -43,6 +66,43 @@ class DailyScreen extends StatelessWidget {
       },
     );
   }
+}
+
+String _buildAppbarTitle(DailyState state) {
+  if (state is DailyLoading) {
+    print("DailyLoading");
+    return "Loading";
+  } else if (state is DailyEmpty) {
+    print("DailyEmpty");
+    return "Empty";
+  } else if (state is DailyPopulated) {
+    print("DailyPopulated");
+    return state.result.timezone;
+  } else if (state is DailyInitial) {
+    print("DailyInitial");
+    return "";
+  } else if (state is DailyError) {
+    print("DailyError");
+    return "Empty";
+  }
+
+  throw ArgumentError('No view for state: $state');
+}
+
+String _buildAppbarSubtitle(DailyState state) {
+  if (state is DailyLoading) {
+    return " ";
+  } else if (state is DailyEmpty) {
+    return " ";
+  } else if (state is DailyPopulated) {
+    return state.result.timezone;
+  } else if (state is DailyInitial) {
+    return "";
+  } else if (state is DailyError) {
+    return " ";
+  }
+
+  throw ArgumentError('No view for state: $state');
 }
 
 Widget _buildVisible(DailyState state) {

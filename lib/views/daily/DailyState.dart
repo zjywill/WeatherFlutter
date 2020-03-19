@@ -8,6 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart';
 
 abstract class DailyState {}
 
@@ -19,8 +21,9 @@ class DailyEmpty implements DailyState {}
 
 class DailyPopulated implements DailyState {
   final Forecast result;
+  final Location timezone;
 
-  DailyPopulated(this.result);
+  DailyPopulated(this.result, this.timezone);
 }
 
 class DailyError implements DailyState {}
@@ -33,8 +36,9 @@ class DailyErrorAction {}
 
 class DailyResultAction {
   final Forecast result;
+  final Location timezone;
 
-  DailyResultAction(this.result);
+  DailyResultAction(this.result, this.timezone);
 }
 
 final forecastReducer = combineReducers<DailyState>([
@@ -51,7 +55,7 @@ DailyState _onError(DailyState state, DailyErrorAction action) => DailyError();
 DailyState _onResult(DailyState state, DailyResultAction action) =>
     action.result.daily.data.isEmpty
         ? DailyEmpty()
-        : DailyPopulated(action.result);
+        : DailyPopulated(action.result, action.timezone);
 
 Stream<dynamic> dailyEpic(
     Stream<dynamic> actions, EpicStore<DailyState> store) {
@@ -74,9 +78,14 @@ Stream<dynamic> _forecast() async* {
     }
 
     log('forecast latitude: $latitude longitude: $longitude');
-    yield DailyResultAction(
-        await DarkSkyApi().fetchForecast(latitude, longitude));
+    var forecast = await DarkSkyApi().fetchForecast(latitude, longitude);
+
+    tz.initializeTimeZones();
+    var timezone = getLocation(forecast.timezone);
+
+    yield DailyResultAction(forecast, timezone);
   } catch (e) {
+    log("error $e");
     yield DailyErrorAction();
   }
 }

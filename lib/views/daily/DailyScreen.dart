@@ -1,8 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart';
 
 import 'DailyInitialScreen.dart';
 import 'DailyState.dart';
@@ -95,7 +96,10 @@ String _buildAppbarSubtitle(DailyState state) {
   } else if (state is DailyEmpty) {
     return " ";
   } else if (state is DailyPopulated) {
-    return state.result.timezone;
+    final localTime = new TZDateTime.from(
+        DateTime.fromMillisecondsSinceEpoch(state.result.currently.time * 1000),
+        state.timezone);
+    return DateFormat.MMMd().format(localTime) + ' '+DateFormat.jm().format(localTime);
   } else if (state is DailyInitial) {
     return "";
   } else if (state is DailyError) {

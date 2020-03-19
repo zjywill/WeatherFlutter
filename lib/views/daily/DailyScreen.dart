@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart';
 
 import 'DailyInitialScreen.dart';
@@ -14,6 +13,9 @@ class DailyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<DailyState, _DailyScreenViewModel>(
+      onInit: (store) {
+        store.dispatch(DailyGetAction());
+      },
       converter: (store) {
         return _DailyScreenViewModel(
             state: store.state,
@@ -99,7 +101,9 @@ String _buildAppbarSubtitle(DailyState state) {
     final localTime = new TZDateTime.from(
         DateTime.fromMillisecondsSinceEpoch(state.result.currently.time * 1000),
         state.timezone);
-    return DateFormat.MMMd().format(localTime) + ' '+DateFormat.jm().format(localTime);
+    return DateFormat.MMMd().format(localTime) +
+        ' ' +
+        DateFormat.jm().format(localTime);
   } else if (state is DailyInitial) {
     return "";
   } else if (state is DailyError) {

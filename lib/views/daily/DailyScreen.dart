@@ -2,13 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timezone/timezone.dart';
 
 import 'DailyInitialScreen.dart';
 import 'DailyState.dart';
 
-class DailyScreen extends StatelessWidget {
+class DailyScreen extends StatefulWidget {
   DailyScreen({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _dailyScreenState();
+  }
+}
+
+class _dailyScreenState extends State<DailyScreen> {
+  RefreshController _refreshController;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshController = new RefreshController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +35,7 @@ class DailyScreen extends StatelessWidget {
       converter: (store) {
         return _DailyScreenViewModel(
             state: store.state,
-            onPressed: () {
+            onRefresh: () {
               print("button pressed2");
               store.dispatch(DailyGetAction());
             });
@@ -49,94 +65,103 @@ class DailyScreen extends StatelessWidget {
               ],
             ),
           ),
-          body: Flex(direction: Axis.vertical, children: <Widget>[
-            Container(
-              color: Colors.brown,
-              padding: EdgeInsets.fromLTRB(16.0, 48.0, 16.0, 4.0),
-              child: RaisedButton(
-                child: Text("Forcast"),
-                onPressed: () => vm.onPressed(),
-              ),
-            ),
-            Expanded(
+          body: Center(
+            child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: vm.onRefresh,
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 500),
                 child: _buildVisible(vm.state),
               ),
-            )
-          ]),
+            ),
+          ),
+//          body: Flex(direction: Axis.vertical, children: <Widget>[
+//            Container(
+//              color: Colors.brown,
+//              padding: EdgeInsets.fromLTRB(16.0, 48.0, 16.0, 4.0),
+//              child: RaisedButton(
+//                child: Text("Forcast"),
+//                onPressed: () => vm.onPressed(),
+//              ),
+//            ),
+//            Expanded(
+//              child: AnimatedSwitcher(
+//                duration: Duration(milliseconds: 500),
+//                child: _buildVisible(vm.state),
+//              ),
+//            )
+//          ]),
         );
       },
     );
   }
-}
 
-String _buildAppbarTitle(DailyState state) {
-  if (state is DailyLoading) {
-    print("DailyLoading");
-    return "Loading";
-  } else if (state is DailyEmpty) {
-    print("DailyEmpty");
-    return "Empty";
-  } else if (state is DailyPopulated) {
-    print("DailyPopulated");
-    return state.result.timezone;
-  } else if (state is DailyInitial) {
-    print("DailyInitial");
-    return "";
-  } else if (state is DailyError) {
-    print("DailyError");
-    return "Empty";
+  String _buildAppbarTitle(DailyState state) {
+    if (state is DailyLoading) {
+      return "Loading";
+    } else if (state is DailyEmpty) {
+      _refreshController.refreshCompleted();
+      return "Empty";
+    } else if (state is DailyPopulated) {
+      _refreshController.refreshCompleted();
+      return state.result.timezone;
+    } else if (state is DailyInitial) {
+      return "";
+    } else if (state is DailyError) {
+      _refreshController.refreshCompleted();
+      return "Empty";
+    }
+
+    throw ArgumentError('No view for state: $state');
   }
 
-  throw ArgumentError('No view for state: $state');
-}
+  String _buildAppbarSubtitle(DailyState state) {
+    if (state is DailyLoading) {
+      return " ";
+    } else if (state is DailyEmpty) {
+      return " ";
+    } else if (state is DailyPopulated) {
+      final localTime = new TZDateTime.from(
+          DateTime.fromMillisecondsSinceEpoch(
+              state.result.currently.time * 1000),
+          state.timezone);
+      return DateFormat.MMMd().format(localTime) +
+          ' ' +
+          DateFormat.jm().format(localTime);
+    } else if (state is DailyInitial) {
+      return "";
+    } else if (state is DailyError) {
+      return " ";
+    }
 
-String _buildAppbarSubtitle(DailyState state) {
-  if (state is DailyLoading) {
-    return " ";
-  } else if (state is DailyEmpty) {
-    return " ";
-  } else if (state is DailyPopulated) {
-    final localTime = new TZDateTime.from(
-        DateTime.fromMillisecondsSinceEpoch(state.result.currently.time * 1000),
-        state.timezone);
-    return DateFormat.MMMd().format(localTime) +
-        ' ' +
-        DateFormat.jm().format(localTime);
-  } else if (state is DailyInitial) {
-    return "";
-  } else if (state is DailyError) {
-    return " ";
+    throw ArgumentError('No view for state: $state');
   }
 
-  throw ArgumentError('No view for state: $state');
-}
+  Widget _buildVisible(DailyState state) {
+    if (state is DailyLoading) {
+      print("DailyLoading");
+      return DailyInitialScreen();
+    } else if (state is DailyEmpty) {
+      print("DailyEmpty");
+      return DailyInitialScreen();
+    } else if (state is DailyPopulated) {
+      print("DailyPopulated");
+      return DailyInitialScreen();
+    } else if (state is DailyInitial) {
+      print("DailyInitial");
+      return DailyInitialScreen();
+    } else if (state is DailyError) {
+      print("DailyError");
+      return DailyInitialScreen();
+    }
 
-Widget _buildVisible(DailyState state) {
-  if (state is DailyLoading) {
-    print("DailyLoading");
-    return DailyInitialScreen();
-  } else if (state is DailyEmpty) {
-    print("DailyEmpty");
-    return DailyInitialScreen();
-  } else if (state is DailyPopulated) {
-    print("DailyPopulated");
-    return DailyInitialScreen();
-  } else if (state is DailyInitial) {
-    print("DailyInitial");
-    return DailyInitialScreen();
-  } else if (state is DailyError) {
-    print("DailyError");
-    return DailyInitialScreen();
+    throw ArgumentError('No view for state: $state');
   }
-
-  throw ArgumentError('No view for state: $state');
 }
 
 class _DailyScreenViewModel {
   final DailyState state;
-  final void Function() onPressed;
+  final void Function() onRefresh;
 
-  _DailyScreenViewModel({this.state, this.onPressed});
+  _DailyScreenViewModel({this.state, this.onRefresh});
 }

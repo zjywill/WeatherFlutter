@@ -1,3 +1,4 @@
+import 'package:WeatherFultter/model/pojo/DailyData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -6,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timezone/timezone.dart';
 
 import 'DailyInitialScreen.dart';
+import 'DailyPopulatedScreen.dart';
 import 'DailyState.dart';
 
 class DailyScreen extends StatefulWidget {
@@ -69,28 +71,14 @@ class _dailyScreenState extends State<DailyScreen> {
             child: SmartRefresher(
               controller: _refreshController,
               onRefresh: vm.onRefresh,
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 500),
-                child: _buildVisible(vm.state),
-              ),
+              child: ListView.builder(
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    final item = null;
+                    return _DailyItem(item: item);
+                  }),
             ),
           ),
-//          body: Flex(direction: Axis.vertical, children: <Widget>[
-//            Container(
-//              color: Colors.brown,
-//              padding: EdgeInsets.fromLTRB(16.0, 48.0, 16.0, 4.0),
-//              child: RaisedButton(
-//                child: Text("Forcast"),
-//                onPressed: () => vm.onPressed(),
-//              ),
-//            ),
-//            Expanded(
-//              child: AnimatedSwitcher(
-//                duration: Duration(milliseconds: 500),
-//                child: _buildVisible(vm.state),
-//              ),
-//            )
-//          ]),
         );
       },
     );
@@ -138,24 +126,7 @@ class _dailyScreenState extends State<DailyScreen> {
   }
 
   Widget _buildVisible(DailyState state) {
-    if (state is DailyLoading) {
-      print("DailyLoading");
-      return DailyInitialScreen();
-    } else if (state is DailyEmpty) {
-      print("DailyEmpty");
-      return DailyInitialScreen();
-    } else if (state is DailyPopulated) {
-      print("DailyPopulated");
-      return DailyInitialScreen();
-    } else if (state is DailyInitial) {
-      print("DailyInitial");
-      return DailyInitialScreen();
-    } else if (state is DailyError) {
-      print("DailyError");
-      return DailyInitialScreen();
-    }
-
-    throw ArgumentError('No view for state: $state');
+    return DailyPopulatedScreen(null);
   }
 }
 
@@ -164,4 +135,20 @@ class _DailyScreenViewModel {
   final void Function() onRefresh;
 
   _DailyScreenViewModel({this.state, this.onRefresh});
+}
+
+class _DailyItem extends StatelessWidget {
+  final DailyData item;
+
+  const _DailyItem({Key key, @required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _onWidgetTab,
+      child: Container(child: Text("dasdas")),
+    );
+  }
+
+  void _onWidgetTab() {}
 }

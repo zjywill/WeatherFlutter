@@ -53,7 +53,7 @@ DailyState _onLoad(DailyState state, DailyLoadingAction action) =>
 DailyState _onError(DailyState state, DailyErrorAction action) => DailyError();
 
 DailyState _onResult(DailyState state, DailyResultAction action) =>
-    action.result.daily.data.isEmpty
+    action.result?.daily?.data?.isEmpty??true
         ? DailyEmpty()
         : DailyPopulated(action.result, action.timezone);
 

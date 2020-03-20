@@ -7,8 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timezone/timezone.dart';
 
-import 'DailyInitialScreen.dart';
-import 'DailyPopulatedScreen.dart';
+import 'DailyEmtpyScreen.dart';
 import 'DailyState.dart';
 
 class DailyScreen extends StatefulWidget {
@@ -16,11 +15,11 @@ class DailyScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _dailyScreenState();
+    return DailyScreenState();
   }
 }
 
-class _dailyScreenState extends State<DailyScreen> {
+class DailyScreenState extends State<DailyScreen> {
   Forecast _forecast;
   RefreshController _refreshController;
 
@@ -90,8 +89,8 @@ class _dailyScreenState extends State<DailyScreen> {
                     }),
               ),
               Visibility(
-                child: DailyInitialScreen(),
-                visible: _forecast == null ? true : false,
+                child: DailyEmptyScreen(),
+                visible: vm.state is DailyEmpty ? true : false,
               ),
             ],
           ),

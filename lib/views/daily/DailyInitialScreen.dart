@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DailyInitialScreen extends StatelessWidget {
+class DailyInitialScreen extends StatelessWidget  {
   DailyInitialScreen();
 
   @override

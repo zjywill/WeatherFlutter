@@ -1,6 +1,7 @@
 import 'package:WeatherFultter/routes.dart';
 import 'package:WeatherFultter/views/daily/DailyScreen.dart';
 import 'package:WeatherFultter/views/daily/DailyState.dart';
+import 'package:WeatherFultter/views/hourly/HourlyScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -38,6 +39,11 @@ class ForecastApp extends StatelessWidget {
         routes: {
           ForecastRoutes.home: (context) {
             return DailyScreen(
+              onInit: store.dispatch(new DailyGetAction()),
+            );
+          },
+          ForecastRoutes.hourly: (context) {
+            return HourlyScreen(
               onInit: store.dispatch(new DailyGetAction()),
             );
           },

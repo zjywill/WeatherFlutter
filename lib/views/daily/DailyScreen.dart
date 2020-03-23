@@ -13,7 +13,6 @@ import 'DailyEmtpyScreen.dart';
 import 'DailyState.dart';
 
 class DailyScreen extends StatefulWidget {
-
   final void Function() onInit;
 
   DailyScreen({@required this.onInit}) : super(key: ForecastKeys.home);
@@ -154,10 +153,14 @@ class _DailyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _onWidgetTab,
+      onTap: () {
+        _onWidgetTab(context);
+      },
       child: Container(child: Text(item.summary)),
     );
   }
 
-  void _onWidgetTab() {}
+  void _onWidgetTab(BuildContext context) {
+    Navigator.pushNamed(context, ForecastRoutes.hourly);
+  }
 }

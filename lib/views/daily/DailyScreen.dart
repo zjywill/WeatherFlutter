@@ -1,5 +1,6 @@
 import 'package:WeatherFultter/model/pojo/DailyData.dart';
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
+import 'package:WeatherFultter/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -7,11 +8,15 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timezone/timezone.dart';
 
+import '../../keys.dart';
 import 'DailyEmtpyScreen.dart';
 import 'DailyState.dart';
 
 class DailyScreen extends StatefulWidget {
-  DailyScreen({Key key}) : super(key: key);
+
+  final void Function() onInit;
+
+  DailyScreen({@required this.onInit}) : super(key: ForecastKeys.home);
 
   @override
   State<StatefulWidget> createState() {
@@ -32,9 +37,6 @@ class DailyScreenState extends State<DailyScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<DailyState, _DailyScreenViewModel>(
-      onInit: (store) {
-        store.dispatch(DailyGetAction());
-      },
       converter: (store) {
         return _DailyScreenViewModel(
             state: store.state,
@@ -54,10 +56,6 @@ class DailyScreenState extends State<DailyScreen> {
       builder: (BuildContext context, _DailyScreenViewModel vm) {
         return Scaffold(
           appBar: AppBar(
-            leading: Icon(
-              Icons.location_searching,
-              color: Colors.white,
-            ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

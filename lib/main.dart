@@ -1,3 +1,4 @@
+import 'package:WeatherFultter/routes.dart';
 import 'package:WeatherFultter/views/daily/DailyScreen.dart';
 import 'package:WeatherFultter/views/daily/DailyState.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,13 @@ class ForecastApp extends StatelessWidget {
           brightness: Brightness.dark,
           primarySwatch: Colors.grey,
         ),
-        home: DailyScreen(),
+        routes: {
+          ForecastRoutes.home: (context) {
+            return DailyScreen(
+              onInit: store.dispatch(new DailyGetAction()),
+            );
+          },
+        },
       ),
     );
   }

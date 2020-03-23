@@ -6,16 +6,40 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_epics/redux_epics.dart';
 import 'package:timezone/timezone.dart';
 
 import '../../keys.dart';
 import 'DailyEmtpyScreen.dart';
 import 'DailyState.dart';
 
-class DailyScreen extends StatefulWidget {
-  final void Function() onInit;
+class DailyScreen extends StatelessWidget {
+  final Store<DailyState> store = Store<DailyState>(
+    forecastReducer,
+    initialState: DailyInitial(),
+    middleware: [
+      EpicMiddleware<DailyState>(dailyEpic),
+    ],
+  );
 
-  DailyScreen({@required this.onInit}) : super(key: ForecastKeys.home);
+  DailyScreen() : super(key: ForecastKeys.home);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreProvider<DailyState>(
+      store: store,
+      child: DailyScreenSub(store),
+    );
+  }
+}
+
+class DailyScreenSub extends StatefulWidget {
+  final Store<DailyState> store;
+
+  DailyScreenSub(this.store) : super() {
+    store.dispatch(DailyGetAction());
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +47,7 @@ class DailyScreen extends StatefulWidget {
   }
 }
 
-class DailyScreenState extends State<DailyScreen> {
+class DailyScreenState extends State<DailyScreenSub> {
   Forecast _forecast;
   RefreshController _refreshController;
 

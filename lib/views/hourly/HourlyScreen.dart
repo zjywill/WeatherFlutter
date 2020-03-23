@@ -1,10 +1,7 @@
-import 'package:WeatherFultter/keys.dart';
 import 'package:flutter/material.dart';
 
 class HourlyScreen extends StatelessWidget {
-  final void Function() onInit;
-
-  HourlyScreen({@required this.onInit}) : super(key: ForecastKeys.hourly);
+  HourlyScreen();
 
   @override
   Widget build(BuildContext context) {

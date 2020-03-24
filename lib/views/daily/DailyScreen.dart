@@ -69,6 +69,7 @@ class DailyScreenState extends State<DailyScreenSub> {
             });
       },
       onDidChange: (store) {
+        print("onDidChange: $store");
         setState(() {
           DailyState state = store.state;
           if (state is DailyPopulated) {

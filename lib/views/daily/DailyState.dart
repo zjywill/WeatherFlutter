@@ -82,7 +82,7 @@ Stream<dynamic> _forecast() async* {
 
     tz.initializeTimeZones();
     var timezone = getLocation(forecast.timezone);
-
+    log('forecast get done');
     yield DailyResultAction(forecast, timezone);
   } catch (e) {
     log("error $e");

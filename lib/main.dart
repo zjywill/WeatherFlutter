@@ -27,7 +27,7 @@ class ForecastApp extends StatelessWidget {
           return DailyScreen();
         },
         ForecastRoutes.hourly: (context) {
-          return HourlyScreen();
+          return HourlyScreen(ModalRoute.of(context).settings.arguments);
         },
       },
     );

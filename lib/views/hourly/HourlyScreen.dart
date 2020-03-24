@@ -1,7 +1,10 @@
+import 'package:WeatherFultter/model/pojo/Hourly.dart';
 import 'package:flutter/material.dart';
 
 class HourlyScreen extends StatelessWidget {
-  HourlyScreen();
+  final Hourly hourly;
+
+  HourlyScreen(this.hourly);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class HourlyScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: 16.0),
             child: Text(
-              "Empty",
+              hourly.data.first.summary,
               style: TextStyle(
                 color: Colors.white,
               ),

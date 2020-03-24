@@ -1,5 +1,6 @@
 import 'package:WeatherFultter/model/pojo/DailyData.dart';
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
+import 'package:WeatherFultter/model/pojo/Hourly.dart';
 import 'package:WeatherFultter/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -107,7 +108,10 @@ class DailyScreenState extends State<DailyScreenSub> {
                     itemCount: _forecast?.daily?.data?.length ?? 0,
                     itemBuilder: (context, index) {
                       var item = _forecast.daily.data[index];
-                      return _DailyItem(item: item);
+                      return _DailyItem(
+                        item: item,
+                        hourly: _forecast.hourly,
+                      );
                     }),
               ),
               Visibility(
@@ -172,8 +176,10 @@ class _DailyScreenViewModel {
 
 class _DailyItem extends StatelessWidget {
   final DailyData item;
+  final Hourly hourly;
 
-  const _DailyItem({Key key, @required this.item}) : super(key: key);
+  const _DailyItem({Key key, @required this.item, this.hourly})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +192,6 @@ class _DailyItem extends StatelessWidget {
   }
 
   void _onWidgetTab(BuildContext context) {
-    Navigator.pushNamed(context, ForecastRoutes.hourly);
+    Navigator.pushNamed(context, ForecastRoutes.hourly, arguments: hourly);
   }
 }

@@ -1,4 +1,4 @@
 class ForecastRoutes {
-  static final home = '/';
-  static final hourly = '/hourly';
+  static const home = '/';
+  static const hourly = '/hourly';
 }

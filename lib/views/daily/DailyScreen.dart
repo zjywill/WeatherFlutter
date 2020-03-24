@@ -187,7 +187,18 @@ class _DailyItem extends StatelessWidget {
       onTap: () {
         _onWidgetTab(context);
       },
-      child: Container(child: Text(item.summary)),
+      child: Card(
+          margin: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          child: Column(
+            children: <Widget>[
+              Text(item.summary),
+              Image(
+                width: 64,
+                height: 64,
+                image: AssetImage('images/Sunny.png'),
+              )
+            ],
+          )),
     );
   }
 

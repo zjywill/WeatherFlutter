@@ -5,8 +5,10 @@ import 'package:WeatherFultter/views/hourly/HourlyScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import 'app.dart';
+
 void main() {
-  runApp(ForecastApp());
+  runApp(createApp());
 }
 
 class ForecastApp extends StatelessWidget {

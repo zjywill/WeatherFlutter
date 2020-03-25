@@ -5,17 +5,24 @@ import 'package:WeatherFultter/model/pojo/Hourly.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timezone/timezone.dart';
 
 import 'state.dart';
 
 class DailyView {
-  Forecast forecast;
+  Forecast _forecast;
+  RefreshController _refreshController;
+
+  DailyView() {
+    _refreshController = new RefreshController();
+  }
 
   Widget buildView(
       DailyPageState state, Dispatch dispatch, ViewService viewService) {
     if (state.forecast != null) {
-      forecast = state.forecast;
+      _forecast = state.forecast;
+      _refreshController.refreshCompleted();
     }
     return Scaffold(
       appBar: AppBar(
@@ -39,24 +46,20 @@ class DailyView {
       ),
       body: Stack(
         children: <Widget>[
-          RefreshIndicator(
+          SmartRefresher(
+            controller: _refreshController,
             onRefresh: () => dispatch(DailyPageActionCreator.onRefresh()),
             child: ListView.builder(
-                itemCount: forecast?.daily?.data?.length ?? 0,
+                itemCount: _forecast?.daily?.data?.length ?? 0,
                 itemBuilder: (context, index) {
-                  var item = forecast.daily.data[index];
+                  var item = _forecast.daily.data[index];
                   return _DailyItem(
                     item: item,
-                    hourly: forecast.hourly,
+                    hourly: _forecast.hourly,
                   );
                 }),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => dispatch(DailyPageActionCreator.onRefresh()),
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -32,7 +32,12 @@ void _onRefresh(Action action, Context<DailyPageState> ctx) async {
 Future<Forecast> getForecast() async {
   tz.initializeTimeZones();
 
-  //await PermissionHandler().requestPermissions([PermissionGroup.location]);
+  ServiceStatus serviceStatus =
+      await PermissionHandler().checkServiceStatus(PermissionGroup.location);
+  log("location serviceStatus: $serviceStatus");
+  if (serviceStatus == ServiceStatus.enabled) {
+    await PermissionHandler().requestPermissions([PermissionGroup.location]);
+  }
 
   PermissionStatus permissionStatus =
       await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
@@ -47,6 +52,6 @@ Future<Forecast> getForecast() async {
 
   log('forecast latitude: $latitude longitude: $longitude');
   var forecast = await DarkSkyApi().fetchForecast(latitude, longitude);
-
+  log('forecast got: $forecast');
   return forecast;
 }

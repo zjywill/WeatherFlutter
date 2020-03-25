@@ -8,15 +8,12 @@ import 'view.dart';
 class DailyPagePage extends Page<DailyPageState, Map<String, dynamic>> {
   DailyPagePage()
       : super(
-            initState: initState,
-            effect: buildEffect(),
-            reducer: buildReducer(),
-            view: buildView,
-            dependencies: Dependencies<DailyPageState>(
-                adapter: null,
-                slots: <String, Dependent<DailyPageState>>{
-                }),
-            middleware: <Middleware<DailyPageState>>[
-            ],);
-
+          initState: initState,
+          effect: buildEffect(),
+          reducer: buildReducer(),
+          view: DailyView().buildView,
+          dependencies: Dependencies<DailyPageState>(
+              adapter: null, slots: <String, Dependent<DailyPageState>>{}),
+          middleware: <Middleware<DailyPageState>>[],
+        );
 }

@@ -54,9 +54,7 @@ class DailyView {
                 itemBuilder: (context, index) {
                   var item = _forecast.daily.data[index];
                   return _DailyItem(
-                    item: item,
-                    hourly: _forecast.hourly,
-                  );
+                      item: item, hourly: _forecast.hourly, dispatch: dispatch);
                 }),
           ),
         ],
@@ -81,8 +79,9 @@ class DailyView {
 class _DailyItem extends StatelessWidget {
   final DailyData item;
   final Hourly hourly;
+  final Dispatch dispatch;
 
-  const _DailyItem({Key key, @required this.item, this.hourly})
+  const _DailyItem({Key key, @required this.item, this.hourly, this.dispatch})
       : super(key: key);
 
   @override
@@ -106,5 +105,7 @@ class _DailyItem extends StatelessWidget {
     );
   }
 
-  void _onWidgetTab(BuildContext context) {}
+  void _onWidgetTab(BuildContext context) {
+    dispatch(DailyPageActionCreator.showHourly(hourly));
+  }
 }

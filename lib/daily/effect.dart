@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:WeatherFultter/model/api/DarkSkyApi.dart';
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
+import 'package:WeatherFultter/model/pojo/Hourly.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:geolocator/geolocator.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -14,6 +16,7 @@ Effect<DailyPageState> buildEffect() {
   return combineEffects(<Object, Effect<DailyPageState>>{
     Lifecycle.initState: _init,
     DailyPageAction.onRefresh: _onRefresh,
+    DailyPageAction.showHourly: _showHourly,
   });
 }
 
@@ -26,6 +29,15 @@ void _onRefresh(Action action, Context<DailyPageState> ctx) async {
   log("Effect _onRefresh");
   ctx.dispatch(DailyPageActionCreator.refreshing());
   ctx.dispatch(DailyPageActionCreator.onPopulated(await getForecast()));
+}
+
+void _showHourly(Action action, Context<DailyPageState> ctx) {
+  if (action.payload != null) {
+    log("_showHourly action.payload: " + action.payload.toString());
+    final Hourly hourly = action.payload ?? Hourly;
+    Navigator.of(ctx.context)
+        .pushNamed('hourly_page', arguments: action.payload);
+  }
 }
 
 Future<Forecast> getForecast() async {

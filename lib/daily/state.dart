@@ -7,12 +7,14 @@ class DailyPageState implements Cloneable<DailyPageState> {
 
   @override
   DailyPageState clone() {
-    return DailyPageState();
+    return DailyPageState()
+      ..isLoading = isLoading
+      ..forecast = forecast;
   }
 }
 
 DailyPageState initState(Map<String, dynamic> args) {
-  DailyPageState dailyPageState = DailyPageState();
+  final DailyPageState dailyPageState = DailyPageState();
   dailyPageState.isLoading = true;
   return dailyPageState;
 }

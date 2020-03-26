@@ -1,3 +1,4 @@
+import 'package:WeatherFultter/hourly/page.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ Widget createApp() {
   final AbstractRoutes routes = PageRoutes(
     pages: <String, Page<Object, dynamic>>{
       'daily_page': DailyPagePage(),
+      'hourly_page': HourlyPagePage(),
     },
   );
 

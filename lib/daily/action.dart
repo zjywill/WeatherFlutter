@@ -1,7 +1,8 @@
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
+import 'package:WeatherFultter/model/pojo/Hourly.dart';
 import 'package:fish_redux/fish_redux.dart';
 
-enum DailyPageAction { onRefresh, refreshing, onPopulated }
+enum DailyPageAction { onRefresh, refreshing, onPopulated, showHourly }
 
 class DailyPageActionCreator {
   static Action onRefresh() {
@@ -14,5 +15,9 @@ class DailyPageActionCreator {
 
   static Action onPopulated(Forecast forecast) {
     return Action(DailyPageAction.onPopulated, payload: forecast);
+  }
+
+  static Action showHourly(Hourly hourly) {
+    return Action(DailyPageAction.showHourly, payload: hourly);
   }
 }

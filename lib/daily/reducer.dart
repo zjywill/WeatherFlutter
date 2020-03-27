@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:WeatherFultter/daily/dailycomponent/state.dart';
+import 'package:WeatherFultter/model/pojo/DailyData.dart';
 import 'package:WeatherFultter/model/pojo/Forecast.dart';
 import 'package:fish_redux/fish_redux.dart';
 
@@ -33,6 +35,14 @@ DailyPageState _onPopulated(DailyPageState state, Action action) {
       log("onPopulated action.payload: " + action.payload.toString());
       final Forecast forecast = action.payload ?? Forecast;
       newState.forecast = forecast;
+      List<DailyComponentState> list = List();
+      for (DailyData data in forecast.daily.data) {
+        DailyComponentState dailyComponentState = DailyComponentState();
+        dailyComponentState.data = data;
+        dailyComponentState.hourly = forecast.hourly;
+        list.add(dailyComponentState);
+      }
+      newState.list = list;
     }
     newState.isLoading = false;
     return newState;
